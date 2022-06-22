@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\CustomerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CustomerRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ * @ApiResource
  */
 class Customer
 {
@@ -27,11 +30,6 @@ class Customer
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $password;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $company;
 
     /**
@@ -40,13 +38,23 @@ class Customer
     private $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="customers")
+     * @ORM\Column(type="string", length=255)
      */
-    private $users;
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
+     */
+    private $user;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -65,19 +73,6 @@ class Customer
 
         return $this;
     }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
     public function getCompany(): ?string
     {
         return $this->company;
@@ -102,26 +97,40 @@ class Customer
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
+
+
+    public function getFirstName(): ?string
     {
-        return $this->users;
+        return $this->firstName;
     }
 
-    public function addUser(User $user): self
+    public function setFirstName(string $firstName): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-        }
+        $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function getLastName(): ?string
     {
-        $this->users->removeElement($user);
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

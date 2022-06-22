@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Config\JmsSerializer\Handlers\DatetimeConfig;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
+ * @ApiResource
  */
 class Product
 {
@@ -45,20 +49,21 @@ class Product
      */
     private $brand;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="product", orphanRemoval=true)
-     */
-    private $medias;
 
     /**
      * @ORM\OneToMany(targetEntity=Feature::class, mappedBy="product", orphanRemoval=true)
      */
     private $features;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
     public function __construct()
     {
-        $this->medias = new ArrayCollection();
         $this->features = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -126,35 +131,8 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection<int, Media>
-     */
-    public function getMedias(): Collection
-    {
-        return $this->medias;
-    }
 
-    public function addMedia(Media $media): self
-    {
-        if (!$this->medias->contains($media)) {
-            $this->medias[] = $media;
-            $media->setProduct($this);
-        }
 
-        return $this;
-    }
-
-    public function removeMedia(Media $media): self
-    {
-        if ($this->medias->removeElement($media)) {
-            // set the owning side to null (unless already changed)
-            if ($media->getProduct() === $this) {
-                $media->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Feature>
@@ -182,6 +160,18 @@ class Product
                 $feature->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

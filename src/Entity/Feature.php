@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\FeatureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FeatureRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=FeatureRepository::class)
+ * @ApiResource
  */
 class Feature
 {
@@ -16,42 +18,26 @@ class Feature
      * @ORM\Column(type="integer")
      */
     private $id;
-
     /**
      * @ORM\Column(type="integer")
      */
     private $memory;
-
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $color;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $screen;
-
     /**
      * @ORM\Column(type="boolean")
      */
     private $bluetooth;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $weight;
-
     /**
      * @ORM\Column(type="boolean")
      */
     private $camera;
-
     /**
      * @ORM\Column(type="boolean")
      */
     private $wifi;
-
     /**
      * @ORM\Column(type="boolean")
      */
@@ -92,18 +78,6 @@ class Feature
         return $this;
     }
 
-    public function getScreen(): ?float
-    {
-        return $this->screen;
-    }
-
-    public function setScreen(float $screen): self
-    {
-        $this->screen = $screen;
-
-        return $this;
-    }
-
     public function isBluetooth(): ?bool
     {
         return $this->bluetooth;
@@ -116,17 +90,7 @@ class Feature
         return $this;
     }
 
-    public function getWeight(): ?float
-    {
-        return $this->weight;
-    }
 
-    public function setWeight(float $weight): self
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
 
     public function isCamera(): ?bool
     {
