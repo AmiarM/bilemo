@@ -5,10 +5,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FeatureRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FeatureRepository::class)
- * @ApiResource
  */
 class Feature
 {
@@ -20,26 +20,32 @@ class Feature
     private $id;
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read:feature"})
      */
     private $memory;
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:feature"})
      */
     private $color;
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"read:feature"})
      */
     private $bluetooth;
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"read:feature"})
      */
     private $camera;
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"read:feature"})
      */
     private $wifi;
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"read:feature"})
      */
     private $video4k;
 

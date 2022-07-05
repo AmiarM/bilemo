@@ -14,6 +14,7 @@
         "doctrine/orm": "^2.12",
         "fakerphp/faker": "^1.19",
         "jms/serializer-bundle": "^4.0",
+        "lexik/jwt-authentication-bundle": "^2.16",
         "liorchamla/faker-prices": "^2.0",
         "mbezhanov/faker-provider-collection": "^2.0",
         "nelmio/cors-bundle": "^2.2",
