@@ -20,32 +20,32 @@ class Feature
     private $id;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"read:feature"})
+     * @Groups({"read:Product:item"})
      */
     private $memory;
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:feature"})
+     * @Groups({"read:Product:item"})
      */
     private $color;
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read:feature"})
+     * @Groups({"read:Product:item"})
      */
     private $bluetooth;
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read:feature"})
+     * @Groups({"read:Product:item"})
      */
     private $camera;
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read:feature"})
+     * @Groups({"read:Product:item"})
      */
     private $wifi;
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read:feature"})
+     * @Groups({"read:Product:item"})
      */
     private $video4k;
 

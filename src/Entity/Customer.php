@@ -11,126 +11,97 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Controller\UsersLinkedCustomerController;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-/**
- * @ORM\Entity(repositoryClass=CustomerRepository::class)
+/** 
  * @ApiResource(
- *   normalizationContext={
- *     "groups"={
- *         "read:users",
- *         "opeapi_definition_name"="Collection"
- *      }
- *   },
- *  attributes={
- *          "pagination_items_per_page":10,
- *          "pagination_maximum_items_per_page":10,
- *          "pagination_client_items_per_page":true
- *   },
- *      itemOperations={
- *          "get"={
- *                "normalization_context"={
- *              "groups"={
- *                  "read:customers",
- *                  "read:customer",
- *                  "read:user",
+ *    normalizationContext={"groups"={"read:customers:collection"}},
+ *    collectionOperations={
+ *      "post"={
+ *          "openapi_context"={
+ *                  "summary"="Ajouter un nouveau client ;",
+ *                  "description"="Ajouter un nouveau client ;",
+ *                  "security"={{"bearerAuth"={}}}
  *              }
- *          },
- *               "openapi_context"={
- *                      "summary"="Consulter le détail d’un utilisateur inscrit lié à un client",
- *                      "description"="Consulter le détail d’un utilisateur inscrit lié à un client"
- *                  }
- *           },
- *           "delete"={
- *              "method":"delete",
- *              "path":"/api/customers/{customer_id}/sers/{user_id}",
- *              "openapi_context"={
- *                      "summary"="Supprimer un utilisateur ajouté par un client",
- *                      "description"="Supprimer un utilisateur ajouté par un client"
- *                }
- *          },
- *      },
- *      collectionOperations={
- *          "post"={
- *              "method":"post",
- *              "path":"/api/customers/{customer_id}/users/{user_id}",
- *              "openapi_context"={
- *                      "summary"="Ajouter un nouvel utilisateur lié à un client ",
- *                      "description"="Ajouter un nouvel utilisateur lié à un client "
- *                }
- *          },
- *          "get"={
- *               "method":"get",
- *               "path":"/customers/{customer_id}/users",
- *               "controller": UsersLinkedCustomerController::class,
- *               "openapi_context"={
- *                      "summary"="Consulter la liste des utilisateurs inscrits liés à un client sur le site web ",
- *                      "description"="Consulter la liste des utilisateurs inscrits liés à un client sur le site web "
- *                }
- *           },
- *      }
+ *       }
+ *    },
+ *    itemOperations={"get"}
  * )
+ * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ * @UniqueEntity("email", message="Un utilisateur ayant cette adresse email existe déjà")
  *
  */
-class Customer implements UserInterface, PasswordAuthenticatedUserInterface
+class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
 
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"read:customer"})
+     * @Groups({"read:User:item","read:customer:item"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"read:customers"})
+     * @Groups({"read:customers:collection", "read:users:collection"})
+     * @Assert\NotBlank(message="L'email doit être renseigné !")
+     * @Assert\Email(message="L'adresse email doit avoir un format valide !")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"read:customer"})
+     * 
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire")
+     * @Assert\Regex(pattern="/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,}$/",message="le mot de passe doit comporter Au moins 8 caractères, un chiffre, une majuscule et un caractère spécial parmi : !@#$%^&*-")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:customers"})
+     * @Groups({"read:customers:collection","read:users:collection"})
+     * @Assert\NotBlank(message="Le prénom est obligatoire")
+     * @Assert\Length(min=3, minMessage="Le prénom doit faire entre 3 et 255 caractères", max=255, maxMessage="Le nom de famille doit faire entre 3 et 255 caractères")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:customers"})
+     * @Groups({"read:customers:collection","read:users:collection"})
+     * @Assert\NotBlank(message="Le nom de famille est obligatoire")
+     * @Assert\Length(min=3, minMessage="Le Le nom de famille doit faire entre 3 et 255 caractères", max=255, maxMessage="Le prénom doit faire entre 3 et 255 caractères")
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:customer"})
+     * @Groups({"read:customers:collection","read:users:collection"})
      */
     private $company;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read:customer"})
+     * 
      */
     private $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="customer")
-     * @Groups({"read:user"})
      */
     private $users;
+
+
 
     public function __construct()
     {
@@ -143,6 +114,12 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
     public function getEmail(): ?string
     {
         return $this->email;
@@ -303,5 +280,11 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+    public static function createFromPayload($id, array $payload)
+    {
+        $customer = new Customer();
+        $customer->setId($id)->setEmail($payload['email']);
+        return $customer;
     }
 }

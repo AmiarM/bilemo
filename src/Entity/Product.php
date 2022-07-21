@@ -5,60 +5,38 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProductRepository;
-use ApiPlatform\Core\Annotation\ApiFilter;
-use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ApiResource(
- *   normalizationContext={
- *     "groups"={
- *         "read:products",
- *         "opeapi_definition_name"="Collection"
- *      },
- *   },
- *   
- *   attributes={
- *          "pagination_items_per_page":10,
- *          "pagination_maximum_items_per_page":10,
- *          "pagination_client_items_per_page":true
- *   },
- *   itemOperations={
- *      "get"={
- *          "normalization_context"={
- *              "groups"={
- *                  "read:products",
- *                  "read:product",
- *                  "read:brand",
- *                  "read:feature"
- *              }
- *          },
- *           "openapi_context"={
- *              "summary"="Consulter les détails d’un produit BILEMO",
- *              "description"="Consulter les détails d’un produit BILEMO"
- *          }
- *      },
- *   },
+ *     cacheHeaders={"max_age"=3600, "shared_max_age"=3600, "vary"={"Authorization"}},
+ *     paginationItemsPerPage = 10,
+ *     normalizationContext={"groups"={"read:Product:collection"}},
  *     collectionOperations={
  *         "get"={
- *                  "openapi_context"={
- *                      "summary"="Consulter la liste des produits BILEMO",
- *                      "description"="Consulter la liste des produits BILEMO"
- *                  }
- *          },
+ *             "openapi_context"={
+ *                  "summary"="Consulter la liste des produits",
+ *                  "description"="Consulter la liste des produits",
+ *                  "security"={{"bearerAuth"={}}}
+ *             }
+ *          }
+ *     },
+ *     itemOperations={
+ *         "get"={
+ *             "normalization_context"={"groups"={"read:Product:collection","read:Product:item"}},
+ *             "openapi_context"={
+ *                  "summary"="Consulter le détail d'un produit",
+ *                  "description"="Consulter le détail d'un produit",
+ *                  "security"={{"bearerAuth"={}}}
+ *             }
+ *         }
  *     }
- * ),
- * @ApiFilter(
- *    SearchFilter::class,properties={
- *        "id":"exact",
- *        "name":"partial"
- *    }
  * )
+ * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
 {
@@ -67,13 +45,13 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"read:products"})
+     * @Groups({"read:Product:collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:products"})
+     * @Groups({"read:Product:collection"})
      * @Assert\NotBlank(message="le nom du produit est obligatoire")
      * @Assert\Length(
      *      min = 3,
@@ -87,7 +65,7 @@ class Product
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank
-     * @Groups({"read:product"})
+     * @Groups({"read:Product:item"})
      * @Assert\NotBlank(message="le nom du produit est obligatoire")
      * @Assert\Length(
      *      min = 3,
@@ -101,26 +79,26 @@ class Product
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank
-     * @Groups({"read:products"})
+     * @Groups({"read:Product:item"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read:product"})
+     * @Groups({"read:Product:item"})
      */
     private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Brand::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"read:product"})
+     * @Groups({"read:Product:item"})
      */
     private $brand;
 
     /**
      * @ORM\OneToMany(targetEntity=Feature::class, mappedBy="product", orphanRemoval=true)
-     * @Groups({"read:feature"})
+     * @Groups({"read:Product:item"})
      */
     private $features;
 

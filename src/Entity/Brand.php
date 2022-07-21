@@ -4,12 +4,10 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BrandRepository;
-use JMS\Serializer\Annotation\Expose;
 use Doctrine\Common\Collections\Collection;
-use JMS\Serializer\Annotation as Serializer;
-use JMS\Serializer\Annotation\ExclusionPolicy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -29,7 +27,14 @@ class Brand
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:brand"})
+     * @Groups({"read:Product:item"})
+     * @Assert\NotBlank(
+     *     message="La marque ne peut pas être vide."
+     * )
+     * @Assert\Length(
+     *     min=2,
+     *     minMessage="Le nom de la marque doit contenir au minimum 2 caractères."
+     * )
      */
     private $name;
 
