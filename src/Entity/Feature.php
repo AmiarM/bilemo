@@ -17,43 +17,43 @@ class Feature
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
     /**
      * @ORM\Column(type="integer")
      * @Groups({"read:Product:item"})
      */
-    private $memory;
+    protected $memory;
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"read:Product:item"})
      */
-    private $color;
+    protected $color;
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"read:Product:item"})
      */
-    private $bluetooth;
+    protected $bluetooth;
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"read:Product:item"})
      */
-    private $camera;
+    protected $camera;
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"read:Product:item"})
      */
-    private $wifi;
+    protected $wifi;
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"read:Product:item"})
      */
-    private $video4k;
+    protected $video4k;
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="features")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $product;
+    protected $product;
 
     public function getId(): ?int
     {

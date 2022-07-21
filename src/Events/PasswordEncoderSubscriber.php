@@ -14,7 +14,7 @@ class PasswordEncoderSubscriber implements EventSubscriberInterface
     /**
      * @var UserPasswordHasherInterface
      */
-    private $encoder;
+    protected $encoder;
 
     public function __construct(UserPasswordHasherInterface $encoder)
     {

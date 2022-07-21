@@ -18,21 +18,8 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /** 
- * @ApiResource(
- *    normalizationContext={"groups"={"read:customers:collection"}},
- *    collectionOperations={
- *      "post"={
- *          "openapi_context"={
- *                  "summary"="Ajouter un nouveau client ;",
- *                  "description"="Ajouter un nouveau client ;",
- *                  "security"={{"bearerAuth"={}}}
- *              }
- *       }
- *    },
- *    itemOperations={"get"}
- * )
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
- * @UniqueEntity("email", message="Un utilisateur ayant cette adresse email existe déjà")
+ * @UniqueEntity("email", message="Un customer ayant cette adresse email existe déjà")
  *
  */
 class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
@@ -42,23 +29,23 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWT
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"read:User:item","read:customer:item"})
+     * @Groups({"read:Users:collection"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"read:customers:collection", "read:users:collection"})
+     * @Groups({"read:Users:collection"})
      * @Assert\NotBlank(message="L'email doit être renseigné !")
      * @Assert\Email(message="L'adresse email doit avoir un format valide !")
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="json")
      * 
      */
-    private $roles = [];
+    protected $roles = [];
 
     /**
      * @var string The hashed password
@@ -66,40 +53,40 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWT
      * @Assert\NotBlank(message="Le mot de passe est obligatoire")
      * @Assert\Regex(pattern="/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,}$/",message="le mot de passe doit comporter Au moins 8 caractères, un chiffre, une majuscule et un caractère spécial parmi : !@#$%^&*-")
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:customers:collection","read:users:collection"})
+     * @Groups({"read:Users:collection"})
      * @Assert\NotBlank(message="Le prénom est obligatoire")
      * @Assert\Length(min=3, minMessage="Le prénom doit faire entre 3 et 255 caractères", max=255, maxMessage="Le nom de famille doit faire entre 3 et 255 caractères")
      */
-    private $firstName;
+    protected $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:customers:collection","read:users:collection"})
+     * @Groups({"read:Users:collection"})
      * @Assert\NotBlank(message="Le nom de famille est obligatoire")
      * @Assert\Length(min=3, minMessage="Le Le nom de famille doit faire entre 3 et 255 caractères", max=255, maxMessage="Le prénom doit faire entre 3 et 255 caractères")
      */
-    private $lastName;
+    protected $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:customers:collection","read:users:collection"})
+     * @Groups({"read:Users:collection"})
      */
-    private $company;
+    protected $company;
 
     /**
      * @ORM\Column(type="datetime")
      * 
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="customer")
      */
-    private $users;
+    protected $users;
 
 
 

@@ -14,7 +14,7 @@ class UserCustomerSubscriber implements EventSubscriberInterface
     /**
      * @var Security
      */
-    private $security;
+    protected $security;
 
     public function __construct(Security $security)
     {

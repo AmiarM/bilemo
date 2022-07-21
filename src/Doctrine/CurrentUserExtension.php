@@ -11,16 +11,23 @@ use Symfony\Component\Security\Core\Security;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     /**
      * @var Security
      */
-    private $security;
-    public function __construct(Security $security)
+    protected $security;
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    protected $checker;
+    public function __construct(Security $security, AuthorizationCheckerInterface $checker)
     {
         $this->security = $security;
+        $this->checker = $checker;
     }
 
     public function applyToCollection(
@@ -43,10 +50,10 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
         $this->addWhere($resourceClass, $queryBuilder);
     }
 
-    private function addWhere(string $resourceClass, QueryBuilder $queryBuilder)
+    protected function addWhere(string $resourceClass, QueryBuilder $queryBuilder)
     {
         $reflectionClass = new \ReflectionClass($resourceClass);
-        if ($reflectionClass->implementsInterface(CustomerOwnedInterface::class)) {
+        if ($reflectionClass->implementsInterface(CustomerOwnedInterface::class) && !$this->checker->isGranted('ROLE_ADMIN')) {
             $alias = $queryBuilder->getRootAliases()[0];
             $customer =  $this->security->getUser();
             if ($customer) {

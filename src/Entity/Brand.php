@@ -23,7 +23,7 @@ class Brand
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -36,13 +36,13 @@ class Brand
      *     minMessage="Le nom de la marque doit contenir au minimum 2 caractères."
      * )
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="brand", orphanRemoval=true)
      * 
      */
-    private $products;
+    protected $products;
 
     public function __construct()
     {

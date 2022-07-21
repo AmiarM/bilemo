@@ -47,7 +47,7 @@ class Product
      * @ORM\Column(type="integer")
      * @Groups({"read:Product:collection"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -60,7 +60,7 @@ class Product
      *      maxMessage = "le nom du brand doit faire entre 3 et 50 caractères"
      * )
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="text")
@@ -74,33 +74,33 @@ class Product
      *      maxMessage = "le nom du brand doit faire entre 3 et 50 caractères"
      * )
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank
      * @Groups({"read:Product:item"})
      */
-    private $price;
+    protected $price;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"read:Product:item"})
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Brand::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"read:Product:item"})
      */
-    private $brand;
+    protected $brand;
 
     /**
      * @ORM\OneToMany(targetEntity=Feature::class, mappedBy="product", orphanRemoval=true)
      * @Groups({"read:Product:item"})
      */
-    private $features;
+    protected $features;
 
     public function __construct()
     {

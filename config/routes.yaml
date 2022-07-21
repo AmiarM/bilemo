@@ -6,3 +6,15 @@ api_login_check:
   path: /api/login_check
 api_refresh_token:
   path: /api/token/refresh
+api_platform:
+  resource: .
+  type: api_platform
+  prefix: /api
+
+api_users_customer:
+  path: "/api/users"
+  methods: ["GET"]
+  defaults:
+    _controller: App\Controller\UserListController:findUsersByCustomer
+    _api_resource_class: 'App\Entity\User'
+    _api_collection_operation_name: "read:user:collection"
