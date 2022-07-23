@@ -9,16 +9,15 @@ https://getcomposer.org/download/
 # installer la CLI de symfony
 ```https://symfony.com/download```
 # cloner le projet
-  - git clone  https://github.com/AmiarM/projet-6.git  ou  
+  - git clone  https://github.com/AmiarM/bilemo_api.git  ou  
   - télécharger l'archive
 # installer les différentes dépendances du projet
 ```
-CD projet-6
+CD bilemo_api
 composer install
 ```
 # configuration de l'application 
   modifier le ficher .env pour ajuster les valeurs:
-  - **MAILER_DSN** pour le server de mail 
   - **DATABASE_URL** pour l'accès à la base de données 
 # Création de la base de données 
 ```symfony console doctrine:database:create```
@@ -29,8 +28,8 @@ composer install
 # charger les fixtures
 ```symfony console doctrine:fixtures:load```
 
-# lancer le servar symfony
+# lancer le serveur symfony
 ```symfony serve```
 
 # acceder à  l'application
-http://localhost:8000
+http://localhost:8000/api
