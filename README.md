@@ -1,6 +1,6 @@
 # bilemo_api
 BileMo est une entreprise offrant toute une sélection de téléphones mobiles haut de gamme.
-e business modèle de BileMo n’est pas de vendre directement ses produits sur le site web, mais de fournir à toutes les plateformes qui le souhaitent l’accès au catalogue via une API (Application Programming Interface).
+le business modèle de BileMo n’est pas de vendre directement ses produits sur le site web, mais de fournir à toutes les plateformes qui le souhaitent l’accès au catalogue via une API (Application Programming Interface).
 Il s’agit donc de vente exclusivement en B2B (business to business).
 # installer le rgestionnaire de dépendances Composer
 https://getcomposer.org/download/
