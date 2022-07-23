@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Controller\UserController;
 use App\Repository\UserRepository;
 use App\Controller\UserListController;
+use App\Controller\UserDeleteController;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -41,6 +42,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *     },
  *     itemOperations={
  *         "delete"={
+ *             "method" : "DELETE",
+ *             "controller ":UserDeleteController::class,
+ *             "path" : "/users/{id}",
  *             "openapi_context"={
  *                  "summary"="Supprimer un utilisateur ajouté par un client.",
  *                  "description"="Supprimer un utilisateur ajouté par un client.",
@@ -50,7 +54,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *         "get"={
  *             "method" : "GET",
  *             "controller ":UserDetailController::class,
- *             "path" : "/api/users/{id}",
+ *             "path" : "/users/{id}",
  *             "normalization_context"={"groups"={"read:User:collection","read:User:item","read:User"}},
  *             "openapi_context"={
  *                  "summary"="Consulter le détail d’un utilisateur inscrit lié à un client ",
