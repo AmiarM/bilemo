@@ -6,8 +6,12 @@ use App\Entity\User;
 use App\Entity\Customer;
 use App\Repository\UserRepository;
 use App\Repository\CustomerRepository;
+use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,7 +45,7 @@ class UserListController extends AbstractController
         $users = $this->userRepository->findBy([
             'customer' => $customerConnecte
         ]);
-        return $users;
+        return $this->json($users, 200, [], ["groups" => "read:Users:collection"]);
     }
     public function __invoke(Customer $customer)
     {

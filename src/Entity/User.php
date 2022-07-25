@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *     collectionOperations={
  *         "get"={
  *                  "method" : "GET",
- *                  "path" : "/api/users",
+ *                  "path" : "/users",
  *                  "controller ":UserListController::class,
  *                  "openapi_context"={ 
  *                  "summary"="Consulter la liste des utilisateurs inscrits liés à un client sur le site web",
