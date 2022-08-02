@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Controller\UserController;
 use App\Repository\UserRepository;
+use App\Controller\UserAddController;
 use App\Controller\UserListController;
 use App\Controller\UserDeleteController;
 use ApiPlatform\Core\Annotation\ApiFilter;

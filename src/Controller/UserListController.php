@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Customer;
 use App\Repository\UserRepository;
+use App\DataProvider\UserDataProvider;
 use App\Repository\CustomerRepository;
 use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;

@@ -2,31 +2,32 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\User;
 
 class UserDeleteController extends AbstractController
 {
     /**
      *
-     * @var UserRepository
+     * @var EntityManagerInterface
      */
-    protected $userRepository;
+    protected $manager;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(EntityManagerInterface $manager)
     {
-        $this->userRepository  = $userRepository;
+        $this->manager  = $manager;
     }
     /**
      * @Route(
      *     name="route_customers_user_delete",
      *     path="/users/{id}",
      *     defaults={"_api_resource_class"=User::class,
-     *               "_api_item_operation_name"="read:Users:collection"
+     *               "_api_item_operation_name"="read:Users:item"
      *     }
      * )
      * @Method("DELETE")
@@ -35,10 +36,9 @@ class UserDeleteController extends AbstractController
     {
         $customerConnecte = $this->getUser();
         if ($customerConnecte) {
-            $user = $this->userRepository->findBy([
-                'id' => $id
-            ]);
-            $this->userRepository->remove($user[0], true);
+            $user = $this->manager->getRepository(User::class)->findBy(["id" => $id]);
+            $this->manager->remove($user[0], true);
+            $this->manager->flush();
         }
     }
     public function __invoke(User $user)

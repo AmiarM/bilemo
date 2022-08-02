@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserCustomerSubscriber implements EventSubscriberInterface
 {
@@ -15,7 +16,11 @@ class UserCustomerSubscriber implements EventSubscriberInterface
      * @var Security
      */
     private $security;
-
+    /**
+     *
+     * @var ValidatorInterface 
+     */
+    private $validatorInterface;
     public function __construct(Security $security)
     {
         $this->security = $security;

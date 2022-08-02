@@ -27,7 +27,7 @@ class UserDetailController extends AbstractController
     /**
      * @Route(
      *     name="route_customers_user",
-     *     path="/api/users/{id}",
+     *     path="/users/{id}",
      *     defaults={"_api_resource_class"=User::class,
      *               "_api_item_operation_name"="read:Users:collection"
      *     }
@@ -36,9 +36,12 @@ class UserDetailController extends AbstractController
      */
     public function findUserByCustomer($id)
     {
+        dd('ok');
         $customerConnecte = $this->getUser();
+        dd($customerConnecte);
         if ($customerConnecte) {
-            $user = $this->userRepository->find($id);
+            $user = $this->userRepository->findBy(['id' => $id]);
+            dd($user);
         }
 
         return $this->json($user, 200, ["Accept" => "application/json"], ["groups" => "read:Users:collection"]);
