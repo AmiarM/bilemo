@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use App\Controller\UserAddController;
 use App\Controller\UserListController;
 use App\Controller\UserDeleteController;
+use App\Controller\UserDetailController;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -21,12 +22,13 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
 
 /** 
  *@ApiResource(
- *     normalizationContext={"groups"={"read:Users:collection"}},
+ *     normalizationContext={"groups"={"read:users:collection","read:users:item"}},
  *     collectionOperations={
  *         "get"={
- *                  "method" : "GET",
- *                  "path" : "/users",
- *                  "controller ":UserListController::class,
+ *                  "method"="GET",
+ *                  "path" ="/users",
+ *                  "controller "=UserListController::class,
+ *                  "normalization_context"={"groups"={"read:users:collection"}},
  *                  "openapi_context"={ 
  *                  "summary"="Consulter la liste des utilisateurs inscrits liés à un client sur le site web",
  *                  "description"="Consulter la liste des utilisateurs inscrits liés à un client sur le site web",
@@ -43,9 +45,11 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *     },
  *     itemOperations={
  *         "delete"={
- *             "method" : "DELETE",
- *             "controller ":UserDeleteController::class,
- *             "path" : "/users/{id}",
+ *             "method" = "DELETE",
+ *             "read"=false,
+ *             "controller"=UserDeleteController::class,
+ *             "path" = "/users/{id}",
+ *             "normalization_context"={"groups"={"read:users:item"}},
  *             "openapi_context"={
  *                  "summary"="Supprimer un utilisateur ajouté par un client.",
  *                  "description"="Supprimer un utilisateur ajouté par un client.",
@@ -53,10 +57,11 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *             }
  *         },
  *         "get"={
- *             "method" : "GET",
- *             "controller ":UserDetailController::class,
- *             "path" : "/users/{id}",
- *             "normalization_context"={"groups"={"read:User:collection","read:User:item","read:User"}},
+ *             "method" ="GET",
+ *             "read"=false,
+ *             "controller"=UserDetailController::class,
+ *             "path" = "/users/{id}",
+ *             "normalization_context"={"groups"={"read:users:item"}},
  *             "openapi_context"={
  *                  "summary"="Consulter le détail d’un utilisateur inscrit lié à un client ",
  *                  "description"="Consulter le détail d’un utilisateur inscrit lié à un client ",
@@ -65,8 +70,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *         }
  *     }
  * )
- * @ApiFilter(SearchFilter::class)
- * @ApiFilter(OrderFilter::class)
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity("email", message="Un user ayant cette adresse email existe déjà")
  */
@@ -76,27 +79,27 @@ class User implements CustomerOwnedInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"read:Users:collection","read:User:item"})
+     * @Groups({"read:users:collection","read:users:item"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Users:collection","read:User:item"})
+     * @Groups({"read:users:collection","read:users:item"})
      * @Assert\Length(min=3, minMessage="Le prénom doit faire entre 3 et 255 caractères", max=255, maxMessage="Le prénom doit faire entre 3 et 255 caractères")
      */
     protected $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Users:collection","read:User:item"})
+     * @Groups({"read:users:collection","read:users:item"})
      * @Assert\Length(min=3, minMessage="Le nom de famille doit faire entre 3 et 255 caractères", max=255, maxMessage="Le nom de famille doit faire entre 3 et 255 caractères")
      */
     protected $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"read:Users:collection","read:User:item"})
+     * @Groups({"read:users:collection","read:users:item"})
      * @Assert\NotBlank(message="L'adresse email du customer est obligatoire")
      * @Assert\Email(message="Le format de l'adresse email doit être valide")
      */
@@ -104,14 +107,14 @@ class User implements CustomerOwnedInterface
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read:Users:collection","read:User:item"})
+     * @Groups({"read:users:item"})
      */
     protected $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"read:Users:collection","read:User:item"})
+     * @Groups({"read:users:item"})
      */
     protected $customer;
 

@@ -20,32 +20,32 @@ class Feature
     protected $id;
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $memory;
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $color;
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $bluetooth;
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $camera;
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $wifi;
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $video4k;
 
@@ -84,7 +84,7 @@ class Feature
         return $this;
     }
 
-    public function isBluetooth(): ?bool
+    public function getBluetooth(): ?bool
     {
         return $this->bluetooth;
     }
@@ -98,7 +98,7 @@ class Feature
 
 
 
-    public function isCamera(): ?bool
+    public function getCamera(): ?bool
     {
         return $this->camera;
     }
@@ -110,7 +110,7 @@ class Feature
         return $this;
     }
 
-    public function isWifi(): ?bool
+    public function getWifi(): ?bool
     {
         return $this->wifi;
     }
@@ -122,7 +122,7 @@ class Feature
         return $this;
     }
 
-    public function isVideo4k(): ?bool
+    public function getVideo4k(): ?bool
     {
         return $this->video4k;
     }

@@ -6,4 +6,4 @@ api_platform:
   swagger:
     versions: [3]
   exception_to_status:
-    App\Exception\ResourceValidationException: 404
+    App\Exception\ResourceValidationException: 404 # Here is the handler for our custom exception

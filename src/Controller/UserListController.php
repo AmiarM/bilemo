@@ -11,6 +11,7 @@ use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,23 +31,20 @@ class UserListController extends AbstractController
         $this->userRepository  = $userRepository;
     }
 
-    /**
-     * @Route(
-     *     name="route_customers_users",
-     *     path="/api/customers/{id}/users",
-     *     defaults={"_api_resource_class"=User::class,
-     *               "_api_item_operation_name"="read:Users:collection"
-     *     }
-     * )
-     * @Method("GET")
-     */
+
     public function findUsersByCustomer()
     {
         $customerConnecte = $this->getUser();
+        if (!$customerConnecte) {
+            return new JsonResponse(["Code" => 403, "Error" => "Vous devez vous connectez pour accéder à la ressource"], Response::HTTP_FORBIDDEN);
+        }
         $users = $this->userRepository->findBy([
             'customer' => $customerConnecte
         ]);
-        return $this->json($users, 200, [], ["groups" => "read:Users:collection"]);
+        if (count($users) == 0) {
+            return new JsonResponse(["Code" => 200, "Message" => "aucun utilisateur en base de données"], Response::HTTP_OK);
+        }
+        return $users;
     }
     public function __invoke(Customer $customer)
     {

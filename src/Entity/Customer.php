@@ -29,13 +29,13 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWT
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"read:Users:collection"})
+     * @Groups({"read:users:item"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"read:Users:collection"})
+     * @Groups({"read:users:item"})
      * @Assert\NotBlank(message="L'email doit être renseigné !")
      * @Assert\Email(message="L'adresse email doit avoir un format valide !")
      */
@@ -57,7 +57,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWT
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Users:collection"})
+     * @Groups({"read:users:item"})
      * @Assert\NotBlank(message="Le prénom est obligatoire")
      * @Assert\Length(min=3, minMessage="Le prénom doit faire entre 3 et 255 caractères", max=255, maxMessage="Le nom de famille doit faire entre 3 et 255 caractères")
      */
@@ -65,7 +65,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWT
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Users:collection"})
+     * @Groups({"read:users:item"})
      * @Assert\NotBlank(message="Le nom de famille est obligatoire")
      * @Assert\Length(min=3, minMessage="Le Le nom de famille doit faire entre 3 et 255 caractères", max=255, maxMessage="Le prénom doit faire entre 3 et 255 caractères")
      */
@@ -73,12 +73,13 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWT
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Users:collection"})
+     * @Groups({"read:users:item"})
      */
     protected $company;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read:users:item"})
      * 
      */
     protected $createdAt;
@@ -271,7 +272,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface, JWT
     public static function createFromPayload($id, array $payload)
     {
         $customer = new Customer();
-        $customer->setId($id)->setEmail($payload['email']);
+        $customer->setId($id)->setEmail($payload['email'])->setFirstName($payload['firstname'])->setLastName($payload['lastname']);
         return $customer;
     }
 }

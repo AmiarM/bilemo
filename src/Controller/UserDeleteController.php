@@ -3,11 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserDeleteController extends AbstractController
@@ -22,27 +21,22 @@ class UserDeleteController extends AbstractController
     {
         $this->manager  = $manager;
     }
-    /**
-     * @Route(
-     *     name="route_customers_user_delete",
-     *     path="/users/{id}",
-     *     defaults={"_api_resource_class"=User::class,
-     *               "_api_item_operation_name"="read:Users:item"
-     *     }
-     * )
-     * @Method("DELETE")
-     */
-    public function deleteUserByCustomer($id)
+
+    public function __invoke(Request $request)
     {
         $customerConnecte = $this->getUser();
-        if ($customerConnecte) {
-            $user = $this->manager->getRepository(User::class)->findBy(["id" => $id]);
-            $this->manager->remove($user[0], true);
-            $this->manager->flush();
+        if (!$customerConnecte) {
+            return new JsonResponse(["Code" => 401, "Error" => "Vous devez vous connectez pour accéder à la ressource"], Response::HTTP_UNAUTHORIZED);
         }
-    }
-    public function __invoke(User $user)
-    {
-        return $this->deleteUserByCustomer($user->getId());
+
+        $params = $request->attributes->get('_route_params');
+        $id = $params['id'];
+        $user = $this->manager->getRepository(User::class)->findBy(["id" => $id]);
+        if (count($user) == 0) {
+            return new JsonResponse(["Code" => 404, "Error" => "l'utilisateur d'id $id n'existe pas"], Response::HTTP_NOT_FOUND);
+        }
+        $this->manager->remove($user[0], true);
+        $this->manager->flush();
+        return new JsonResponse(["Code" => 204, "success" => "l'utilisateur d'id $id est supprimé avec succès"], Response::HTTP_NO_CONTENT);
     }
 }

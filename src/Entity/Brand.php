@@ -22,12 +22,13 @@ class Brand
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read:products:item"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      * @Assert\NotBlank(
      *     message="La marque ne peut pas être vide."
      * )

@@ -5,36 +5,46 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ProductsListActionController;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Controller\ProductsDetailActionController;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\Collection;
 
 /**
  * @ApiResource(
- *     cacheHeaders={"max_age"=3600, "shared_max_age"=3600, "vary"={"Authorization"}},
- *     paginationItemsPerPage = 10,
- *     normalizationContext={"groups"={"read:Product:collection"}},
- *     collectionOperations={
- *         "get"={
+ *    normalizationContext={"groups"={"read:products:collection","read:products:item"}},
+ *    collectionOperations={
+ *        "liste-des-produits"={
+ *             "method"="GET",
+ *             "path"="/products",
+ *             "read"=false,
+ *             "controller"= ProductsListActionController::class,
+ *             "normalization_context"={"groups"={"read:products:collection"}},
  *             "openapi_context"={
  *                  "summary"="Consulter la liste des produits",
  *                  "description"="Consulter la liste des produits",
  *                  "security"={{"bearerAuth"={}}}
  *             }
- *          }
- *     },
- *     itemOperations={
- *         "get"={
- *             "normalization_context"={"groups"={"read:Product:collection","read:Product:item"}},
+ *         }
+ *    },
+ *    itemOperations={
+ *       "détail-du-produit"={
+ *           "method"="GET",
+ *           "path"="/products/{id}",
+ *           "controller"= ProductsDetailActionController::class,
+ *           "read"=false,
+ *            "deserialize"=false,
+ *            "normalization_context"={"groups"={"read:products:item"}},
  *             "openapi_context"={
  *                  "summary"="Consulter le détail d'un produit",
  *                  "description"="Consulter le détail d'un produit",
- *                  "security"={{"bearerAuth"={}}}
+ *                  "security"={{"bearerAuth"={}}},
  *             }
- *         }
- *     }
+ *        } 
+ *    }
  * )
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
@@ -45,13 +55,13 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"read:Product:collection"})
+     * @Groups({"read:products:collection","read:products:item"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Product:collection"})
+     * @Groups({"read:products:item","read:products:collection"})
      * @Assert\NotBlank(message="le nom du produit est obligatoire")
      * @Assert\Length(
      *      min = 3,
@@ -65,7 +75,7 @@ class Product
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      * @Assert\NotBlank(message="le nom du produit est obligatoire")
      * @Assert\Length(
      *      min = 3,
@@ -79,26 +89,26 @@ class Product
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $price;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Brand::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $brand;
 
     /**
      * @ORM\OneToMany(targetEntity=Feature::class, mappedBy="product", orphanRemoval=true)
-     * @Groups({"read:Product:item"})
+     * @Groups({"read:products:item"})
      */
     protected $features;
 
