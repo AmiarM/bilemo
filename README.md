@@ -19,6 +19,10 @@ composer install
 # configuration de l'application 
   modifier le ficher .env pour ajuster les valeurs:
   - **DATABASE_URL** pour l'accès à la base de données 
+  Générer les clés  SSL:
+  - **mkdir -p config/jwt
+  - **openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+  - **openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 # Création de la base de données 
 ```symfony console doctrine:database:create```
 
