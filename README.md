@@ -4,10 +4,10 @@ le business modèle de BileMo n’est pas de vendre directement ses produits sur
 Il s’agit donc de vente exclusivement en B2B (business to business).
 # installer le rgestionnaire de dépendances Composer
 https://getcomposer.org/download/
-# installer Git
-https://getcomposer.org/download/
 # installer la CLI de symfony
 ```https://symfony.com/download```
+# installer Git
+https://getcomposer.org/download/
 # cloner le projet
   - git clone  https://github.com/AmiarM/bilemo_api.git  ou  
   - télécharger l'archive
