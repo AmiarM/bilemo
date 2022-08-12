@@ -35,5 +35,5 @@ composer install
 # lancer le serveur symfony
 ```symfony serve```
 
-# acceder à  l'application
+# acceder à  la documentation de  l'application
 http://localhost:8000/api
