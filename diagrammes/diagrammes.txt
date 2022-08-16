@@ -1,0 +1,12 @@
+
+Sommaire
+Use case
+Détail d’un produit 
+Liste des produits 
+Connexion 
+Liste des utilisateurs 
+Détail d’un utilisateur 
+Supprimer un utilisateur 
+Ajouter un utilisateur 
+Diagramme de classe 
+Le schéma de la base de données

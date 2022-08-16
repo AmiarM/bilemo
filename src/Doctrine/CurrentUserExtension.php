@@ -4,15 +4,16 @@
 namespace App\Doctrine;
 
 
+use App\Entity\Customer;
 use Doctrine\ORM\QueryBuilder;
 use App\Entity\UserOwnedInterface;
 use App\Entity\CustomerOwnedInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 
 class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
@@ -55,6 +56,9 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
         $reflectionClass = new \ReflectionClass($resourceClass);
         if ($reflectionClass->implementsInterface(CustomerOwnedInterface::class) && !$this->checker->isGranted('ROLE_ADMIN')) {
             $alias = $queryBuilder->getRootAliases()[0];
+            /**
+             * @var  Customer
+             */
             $customer =  $this->security->getUser();
             if ($customer) {
                 $queryBuilder

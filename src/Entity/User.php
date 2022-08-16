@@ -25,6 +25,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *     normalizationContext={"groups"={"read:users:collection","read:users:item"}},
  *     collectionOperations={
  *         "get"={
+ *                  "security"="is_granted('ROLE_USER')",
  *                  "method"="GET",
  *                  "path" ="/users",
  *                  "controller "=UserListController::class,
@@ -36,6 +37,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *              }
  *         },
  *         "post"={
+ *             "security"="is_granted('ROLE_USER')",
  *             "openapi_context"={
  *                  "summary"="Ajouter un nouvel utilisateur lié à un client ;",
  *                  "description"="Ajouter un nouvel utilisateur lié à un client ;",
@@ -45,6 +47,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *     },
  *     itemOperations={
  *         "delete"={
+ *             "security"="is_granted('ROLE_USER')",
  *             "method" = "DELETE",
  *             "read"=false,
  *             "controller"=UserDeleteController::class,
@@ -57,6 +60,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\security;
  *             }
  *         },
  *         "get"={
+ *             "security"="is_granted('ROLE_USER')",
  *             "method" ="GET",
  *             "read"=false,
  *             "controller"=UserDetailController::class,
